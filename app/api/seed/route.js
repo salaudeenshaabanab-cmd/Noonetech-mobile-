@@ -116,6 +116,59 @@ async function GET(request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  try {
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "Product" (
+        "id" TEXT NOT NULL PRIMARY KEY,
+        "name" TEXT NOT NULL,
+        "category" TEXT NOT NULL,
+        "price" INTEGER NOT NULL,
+        "spec" TEXT NOT NULL,
+        "description" TEXT NOT NULL,
+        "specs" TEXT NOT NULL,
+        "stock" INTEGER NOT NULL DEFAULT 0,
+        "imageUrl" TEXT,
+        "active" BOOLEAN NOT NULL DEFAULT true,
+        "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" TIMESTAMP(3) NOT NULL
+      );
+    `);
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "Order" (
+        "id" TEXT NOT NULL PRIMARY KEY,
+        "customerName" TEXT NOT NULL,
+        "customerEmail" TEXT NOT NULL,
+        "shippingAddress" TEXT NOT NULL,
+        "shippingCity" TEXT NOT NULL,
+        "shippingZip" TEXT NOT NULL,
+        "subtotal" INTEGER NOT NULL,
+        "shipping" INTEGER NOT NULL,
+        "tax" INTEGER NOT NULL,
+        "total" INTEGER NOT NULL,
+        "status" TEXT NOT NULL DEFAULT 'pending',
+        "stripeSessionId" TEXT UNIQUE,
+        "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" TIMESTAMP(3) NOT NULL
+      );
+    `);
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "OrderItem" (
+        "id" TEXT NOT NULL PRIMARY KEY,
+        "orderId" TEXT NOT NULL,
+        "productId" TEXT NOT NULL,
+        "quantity" INTEGER NOT NULL,
+        "priceAtPurchase" INTEGER NOT NULL,
+        FOREIGN KEY ("orderId") REFERENCES "Order"("id"),
+        FOREIGN KEY ("productId") REFERENCES "Product"("id")
+      );
+    `);
+  } catch (err) {
+    return NextResponse.json(
+      { error: "Failed to create tables", detail: String(err) },
+      { status: 500 }
+    );
+  }
+
   const existingCount = await prisma.product.count();
   if (existingCount > 0) {
     return NextResponse.json({
@@ -128,7 +181,7 @@ async function GET(request) {
   }
 
   return NextResponse.json({
-    message: `Successfully added ${PRODUCTS.length} products.`,
+    message: `Successfully created tables and added ${PRODUCTS.length} products.`,
   });
 }
 
