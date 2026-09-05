@@ -1,6 +1,9 @@
 const { prisma } = require("../../../lib/prisma");
 const { NextResponse } = require("next/server");
 
+const dynamic = "force-dynamic";
+const revalidate = 0;
+
 async function GET() {
   try {
     const products = await prisma.product.findMany({
@@ -13,7 +16,10 @@ async function GET() {
       specs: JSON.parse(p.specs),
     }));
 
-    return NextResponse.json({ products: formatted });
+    return NextResponse.json(
+      { products: formatted },
+      { headers: { "Cache-Control": "no-store, max-age=0" } }
+    );
   } catch (error) {
     console.error("Failed to fetch products:", error);
     return NextResponse.json(
@@ -23,4 +29,4 @@ async function GET() {
   }
 }
 
-module.exports = { GET };
+module.exports = { GET, dynamic, revalidate };
