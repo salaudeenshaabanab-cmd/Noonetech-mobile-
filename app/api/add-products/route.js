@@ -1,6 +1,9 @@
 const { prisma } = require("../../../lib/prisma");
 const { NextResponse } = require("next/server");
 
+const dynamic = "force-dynamic";
+const revalidate = 0;
+
 async function POST(request) {
   const { searchParams } = new URL(request.url);
   const key = searchParams.get("key");
@@ -48,4 +51,4 @@ async function POST(request) {
   });
 }
 
-module.exports = { POST };
+module.exports = { POST, dynamic, revalidate };
