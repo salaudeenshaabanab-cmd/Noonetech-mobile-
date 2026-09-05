@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useMemo, useEffect } from "react";
 import { Search, ShoppingBag, X, Plus, Minus, Check, Package, Smartphone, Laptop, Tablet, Headphones, ChevronRight } from "lucide-react";
@@ -11,7 +10,7 @@ const CATEGORIES = [
   { id: "accessories", label: "Accessories", icon: Headphones },
 ];
 
-const currency = (cents) => `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+const currency = (naira) => `₦${naira.toLocaleString("en-NG")}`;
 
 export default function NooneTech() {
   const [products, setProducts] = useState([]);
@@ -50,8 +49,8 @@ export default function NooneTech() {
   const cartItems = cart.map((c) => ({ ...c, product: products.find((p) => p.id === c.id) })).filter((c) => c.product);
   const cartCount = cart.reduce((s, c) => s + c.qty, 0);
   const subtotal = cartItems.reduce((s, c) => s + c.product.price * c.qty, 0);
-  const shipping = subtotal > 0 && subtotal < 20000 ? 1200 : 0;
-  const tax = Math.round(subtotal * 0.0825);
+  const shipping = 0;
+  const tax = 0;
   const total = subtotal + shipping + tax;
 
   function addToCart(id) {
@@ -109,7 +108,7 @@ export default function NooneTech() {
       <style>{`
         * { box-sizing: border-box; }
         body { margin: 0; }
-        .btn { cursor: pointer; border: none; }
+        .btn { cursor: pointer; border: none; transition: opacity 0.15s ease, transform 0.1s ease; }
         .btn:active { transform: scale(0.97); }
         .btn:hover { opacity: 0.88; }
         input:focus, button:focus-visible, select:focus-visible { outline: 2px solid #1E1B8F; outline-offset: 2px; }
@@ -181,7 +180,6 @@ export default function NooneTech() {
         ) : products.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 0", color: "#8A8F98" }}>
             <p style={{ fontSize: 14.5 }}>No products in the database yet.</p>
-            <p style={{ fontSize: 13 }}>Run npm run seed to add starter products.</p>
           </div>
         ) : (
           <>
@@ -227,11 +225,11 @@ export default function NooneTech() {
                   <Field name="email" label="Email" type="email" placeholder="jordan@example.com" required />
                   <Field name="address" label="Shipping address" placeholder="118 Main Street" required />
                   <div style={{ display: "flex", gap: 10 }}>
-                    <Field name="city" label="City" placeholder="Austin" required />
-                    <Field name="zip" label="ZIP" placeholder="73301" required />
+                    <Field name="city" label="City" placeholder="Lagos" required />
+                    <Field name="zip" label="ZIP" placeholder="100001" required />
                   </div>
                   <div style={{ marginTop: 6, padding: 12, background: "#EAEAE7", fontSize: 12.5, color: "#5C6068" }}>
-                    You'll enter card details on Stripe's secure checkout page next.
+                    You'll enter payment details on the secure checkout page next.
                   </div>
                   {checkoutError && (
                     <div style={{ padding: 12, background: "#FEECEC", color: "#B91C1C", fontSize: 13 }}>{checkoutError}</div>
@@ -270,16 +268,7 @@ export default function NooneTech() {
 
             {cartItems.length > 0 && checkoutStep !== "form" && (
               <div style={{ padding: 22, borderTop: "1px solid #E2E1DE" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 13, color: "#5C6068" }}>
-                  <span>Subtotal</span><span>{currency(subtotal)}</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 13, color: "#5C6068" }}>
-                  <span>Shipping</span><span>{shipping === 0 ? "Free" : currency(shipping)}</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 14, fontSize: 13, color: "#5C6068" }}>
-                  <span>Tax</span><span>{currency(tax)}</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 14, fontSize: 15, fontWeight: 700, paddingTop: 10, borderTop: "1px solid #E2E1DE" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 14, fontSize: 15, fontWeight: 700, paddingTop: 10 }}>
                   <span>Total</span><span>{currency(total)}</span>
                 </div>
                 <button className="btn" onClick={() => setCheckoutStep("form")} style={{ width: "100%", background: "#1E1B8F", color: "#F5F5F4", padding: "14px", fontSize: 14.5, fontWeight: 700 }}>
@@ -301,12 +290,17 @@ function ProductThumb({ product, size = 80 }) {
 
 function ProductCard({ product, onAdd, onSelect }) {
   const hue = { phones: "#4A5568", laptops: "#1E1B8F", tablets: "#6B7280", accessories: "#1A1B1E" }[product.category] || "#4A5568";
-  const lowStock = product.stock > 0 && product.stock <= 8;
+  const isUnlimited = product.stock >= 999;
+  const lowStock = !isUnlimited && product.stock > 0 && product.stock <= 8;
   const outOfStock = product.stock <= 0;
   return (
     <div className="prod-row" style={{ background: "#FFFFFF", padding: 16, display: "flex", flexDirection: "column" }}>
       <button className="btn" onClick={() => onSelect(product)} style={{ display: "block", width: "100%", padding: 0, background: "none", marginBottom: 12 }}>
-        <div style={{ height: 130, background: `linear-gradient(160deg, ${hue}, #1E1B8F)` }} />
+        {product.imageUrl ? (
+          <img src={product.imageUrl} alt={product.name} style={{ width: "100%", height: 130, objectFit: "cover", display: "block" }} />
+        ) : (
+          <div style={{ height: 130, background: `linear-gradient(160deg, ${hue}, #1E1B8F)` }} />
+        )}
       </button>
       <button className="btn" onClick={() => onSelect(product)} style={{ display: "block", width: "100%", textAlign: "left", background: "none", padding: 0, marginBottom: 4 }}>
         <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>{product.name}</p>
@@ -334,6 +328,7 @@ function ProductCard({ product, onAdd, onSelect }) {
 
 function ProductModal({ product, onClose, onAdd }) {
   const hue = { phones: "#4A5568", laptops: "#1E1B8F", tablets: "#6B7280", accessories: "#1A1B1E" }[product.category] || "#4A5568";
+  const isUnlimited = product.stock >= 999;
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
       <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(14,15,18,0.5)" }} />
@@ -341,7 +336,11 @@ function ProductModal({ product, onClose, onAdd }) {
         <button className="btn" onClick={onClose} style={{ position: "absolute", top: 14, right: 14, background: "rgba(255,255,255,0.9)", padding: 8, zIndex: 2, color: "#1E1B8F" }}>
           <X size={18} />
         </button>
-        <div style={{ flex: "1 1 320px", minHeight: 300, background: `linear-gradient(160deg, ${hue}, #1E1B8F)` }} />
+        {product.imageUrl ? (
+          <img src={product.imageUrl} alt={product.name} style={{ flex: "1 1 320px", minHeight: 300, objectFit: "cover", width: "100%" }} />
+        ) : (
+          <div style={{ flex: "1 1 320px", minHeight: 300, background: `linear-gradient(160deg, ${hue}, #1E1B8F)` }} />
+        )}
         <div style={{ flex: "1 1 320px", padding: 32, overflowY: "auto" }}>
           <span style={{ fontSize: 11.5, fontWeight: 600, color: "#1E1B8F", textTransform: "capitalize" }}>{product.category}</span>
           <h2 style={{ fontSize: 24, margin: "8px 0 4px", fontWeight: 700 }}>{product.name}</h2>
@@ -354,7 +353,9 @@ function ProductModal({ product, onClose, onAdd }) {
               </li>
             ))}
           </ul>
-          <p style={{ fontSize: 12.5, color: "#8A8F98", marginBottom: 20 }}>{product.stock} in stock</p>
+          {!isUnlimited && (
+            <p style={{ fontSize: 12.5, color: "#8A8F98", marginBottom: 20 }}>{product.stock} in stock</p>
+          )}
           <button
             className="btn"
             onClick={() => onAdd(product.id)}
