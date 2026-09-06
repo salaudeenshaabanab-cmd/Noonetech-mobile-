@@ -117,16 +117,14 @@ export default function NooneTech() {
 
       <header style={{ borderBottom: "1px solid #E2E1DE", position: "sticky", top: 0, background: "#F5F5F4", zIndex: 20 }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "16px 20px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-          <button className="btn" onClick={() => { setCategory("all"); setQuery(""); }} style={{ background: "none", padding: 0, display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 34, height: 34, background: "#1E1B8F", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <div style={{ width: 20, height: 20, background: "#FFFFFF", transform: "rotate(45deg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ transform: "rotate(-45deg)", color: "#1E1B8F", fontWeight: 800, fontSize: 12 }}>N</span>
-              </div>
-            </div>
-            <span style={{ display: "flex", flexDirection: "column", lineHeight: 1.05 }}>
-              <span style={{ fontSize: 15, fontWeight: 800, color: "#1E1B8F" }}>NOONETECH</span>
-              <span style={{ fontSize: 9.5, fontWeight: 700, color: "#1E1B8F", letterSpacing: "0.12em" }}>MOBILE STORE</span>
-            </span>
+          
+          {/* UPDATED LOGO SECTION */}
+          <button className="btn" onClick={() => { setCategory("all"); setQuery(""); }} style={{ background: "none", padding: 0, display: "flex", alignItems: "center" }}>
+            <img 
+              src="https://i.ibb.co/7tD7KKBW/514-AA084-FDAE-423-F-9-AFE-532248-E27467.png" 
+              alt="Noonetech Mobile Store Logo" 
+              style={{ height: "40px", width: "auto", display: "block", objectFit: "contain" }} 
+            />
           </button>
 
           <div style={{ flex: 1, maxWidth: 420, position: "relative", minWidth: 160 }}>
