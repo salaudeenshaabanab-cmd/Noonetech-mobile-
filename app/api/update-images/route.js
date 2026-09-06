@@ -27,8 +27,9 @@ async function POST(request) {
   const notFound = [];
 
   for (const u of updates) {
+    const where = u.spec ? { name: u.name, spec: u.spec } : { name: u.name };
     const result = await prisma.product.updateMany({
-      where: { name: u.name, spec: u.spec },
+      where,
       data: { imageUrl: u.imageUrl },
     });
     if (result.count > 0) {
