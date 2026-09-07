@@ -35,6 +35,17 @@ export default function NooneTech() {
       .catch(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    if (selected || cartOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selected, cartOpen]);
+
   const filtered = useMemo(() => {
     let list = products.filter((p) => {
       const matchCat = category === "all" || p.category === category;
@@ -52,18 +63,6 @@ export default function NooneTech() {
   const shipping = 0;
   const tax = 0;
   const total = subtotal + shipping + tax;
-useEffect(() => {
-    if (selected || cartOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [selected, cartOpen]);
-
-  function addToCart(id) {
 
   function addToCart(id) {
     setCart((prev) => {
