@@ -117,14 +117,12 @@ export default function NooneTech() {
 
       <header style={{ borderBottom: "1px solid #E2E1DE", position: "sticky", top: 0, background: "#F5F5F4", zIndex: 20 }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "16px 20px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-          
-          {/* UPDATED LOGO SECTION */}
-          <button className="btn" onClick={() => { setCategory("all"); setQuery(""); }} style={{ background: "none", padding: 0, display: "flex", alignItems: "center" }}>
-            <img 
-              src="https://i.ibb.co/7tD7KKBW/514-AA084-FDAE-423-F-9-AFE-532248-E27467.png" 
-              alt="Noonetech Mobile Store Logo" 
-              style={{ height: "40px", width: "auto", display: "block", objectFit: "contain" }} 
-            />
+          <button className="btn" onClick={() => { setCategory("all"); setQuery(""); }} style={{ background: "none", padding: 0, display: "flex", alignItems: "center", gap: 10 }}>
+            <img src="https://i.ibb.co/V53147L/514-AA084-FDAE-423-F-9-AFE-532248-E27467.png" alt="NOONETECH" style={{ width: 34, height: 34, objectFit: "contain", flexShrink: 0 }} />
+            <span style={{ display: "flex", flexDirection: "column", lineHeight: 1.05 }}>
+              <span style={{ fontSize: 15, fontWeight: 800, color: "#1E1B8F" }}>NOONETECH</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, color: "#1E1B8F", letterSpacing: "0.12em" }}>MOBILE STORE</span>
+            </span>
           </button>
 
           <div style={{ flex: 1, maxWidth: 420, position: "relative", minWidth: 160 }}>
@@ -362,6 +360,14 @@ function ProductModal({ product, onClose, onAdd }) {
           >
             {product.stock <= 0 ? "Unavailable" : "Add to cart"}
           </button>
+          <a
+            href={`https://wa.me/2348147684917?text=${encodeURIComponent("Hi, I'm interested in the " + product.name + " (" + product.spec + "). Is it available?")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "block", width: "100%", textAlign: "center", background: "#25D366", color: "#fff", padding: "14px", fontSize: 14.5, fontWeight: 700, marginTop: 10, textDecoration: "none", boxSizing: "border-box" }}
+          >
+            Ask about this phone on WhatsApp
+          </a>
         </div>
       </div>
     </div>
