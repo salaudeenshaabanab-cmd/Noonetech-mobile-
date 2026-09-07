@@ -35,23 +35,6 @@ export default function NooneTech() {
       .catch(() => setLoading(false));
   }, []);
 
-   useEffect(() => {
-    if (selected || cartOpen) {
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
-      document.body.dataset.scrollY = String(scrollY);
-    } else {
-      const scrollY = parseInt(document.body.dataset.scrollY || "0", 10);
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      window.scrollTo(0, scrollY);
-    }
-  }, [selected, cartOpen]);
-
-
   const filtered = useMemo(() => {
     let list = products.filter((p) => {
       const matchCat = category === "all" || p.category === category;
@@ -69,6 +52,22 @@ export default function NooneTech() {
   const shipping = 0;
   const tax = 0;
   const total = subtotal + shipping + tax;
+
+  useEffect(() => {
+    if (selected || cartOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.dataset.scrollY = String(scrollY);
+    } else {
+      const scrollY = parseInt(document.body.dataset.scrollY || "0", 10);
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, scrollY);
+    }
+  }, [selected, cartOpen]);
 
   function addToCart(id) {
     setCart((prev) => {
@@ -349,7 +348,7 @@ function ProductModal({ product, onClose, onAdd }) {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
       <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(14,15,18,0.5)" }} />
-      <div style={{ position: "relative", background: "#F5F5F4", maxWidth: 780, width: "100%", maxHeight: "88vh", overflow: "hidden", display: "flex", flexWrap: "wrap" }}>
+      <div style={{ position: "relative", background: "#F5F5F4", maxWidth: 780, width: "100%", maxHeight: "88vh", display: "flex", flexWrap: "wrap", overflowY: "auto" }}>
         <button className="btn" onClick={onClose} style={{ position: "absolute", top: 14, right: 14, background: "rgba(255,255,255,0.9)", padding: 8, zIndex: 2, color: "#1E1B8F" }}>
           <X size={18} />
         </button>
@@ -358,7 +357,7 @@ function ProductModal({ product, onClose, onAdd }) {
         ) : (
           <div style={{ flex: "1 1 320px", minHeight: 300, background: `linear-gradient(160deg, ${hue}, #1E1B8F)` }} />
         )}
-        <div style={{ flex: "1 1 320px", padding: 32, overflowY: "auto", minHeight: 0, maxHeight: "88vh" }}>
+        <div style={{ flex: "1 1 320px", padding: 32 }}>
           <span style={{ fontSize: 11.5, fontWeight: 600, color: "#1E1B8F", textTransform: "capitalize" }}>{product.category}</span>
           <h2 style={{ fontSize: 24, margin: "8px 0 4px", fontWeight: 700 }}>{product.name}</h2>
           <p style={{ fontSize: 22, fontWeight: 700, margin: "12px 0 20px" }}>{currency(product.price)}</p>
