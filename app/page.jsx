@@ -1,4 +1,4 @@
-"use client";
+i"use client";
 import React, { useState, useMemo, useEffect } from "react";
 import { Search, ShoppingBag, X, Plus, Minus, Check, Package, Smartphone, Laptop, Tablet, Headphones, ChevronRight } from "lucide-react";
 
@@ -52,6 +52,18 @@ export default function NooneTech() {
   const shipping = 0;
   const tax = 0;
   const total = subtotal + shipping + tax;
+useEffect(() => {
+    if (selected || cartOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selected, cartOpen]);
+
+  function addToCart(id) {
 
   function addToCart(id) {
     setCart((prev) => {
