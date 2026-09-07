@@ -341,7 +341,7 @@ function ProductModal({ product, onClose, onAdd }) {
         ) : (
           <div style={{ flex: "1 1 320px", minHeight: 300, background: `linear-gradient(160deg, ${hue}, #1E1B8F)` }} />
         )}
-        <div style={{ flex: "1 1 320px", padding: 32, overflowY: "auto" }}>
+        <div style={{ flex: "1 1 320px", padding: 32, overflowY: "auto", minHeight: 0, maxHeight: "88vh" }}>
           <span style={{ fontSize: 11.5, fontWeight: 600, color: "#1E1B8F", textTransform: "capitalize" }}>{product.category}</span>
           <h2 style={{ fontSize: 24, margin: "8px 0 4px", fontWeight: 700 }}>{product.name}</h2>
           <p style={{ fontSize: 22, fontWeight: 700, margin: "12px 0 20px" }}>{currency(product.price)}</p>
