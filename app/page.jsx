@@ -1,4 +1,4 @@
-i"use client";
+"use client";
 import React, { useState, useMemo, useEffect } from "react";
 import { Search, ShoppingBag, X, Plus, Minus, Check, Package, Smartphone, Laptop, Tablet, Headphones, ChevronRight } from "lucide-react";
 
