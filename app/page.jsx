@@ -1,4 +1,4 @@
-"use client";
+""use client";
 import React, { useState, useMemo, useEffect } from "react";
 import { Search, ShoppingBag, X, Plus, Minus, Check, Package, Smartphone, Laptop, Tablet, Headphones, ChevronRight } from "lucide-react";
 
@@ -348,7 +348,7 @@ function ProductModal({ product, onClose, onAdd }) {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
       <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(14,15,18,0.5)" }} />
-      <div style={{ position: "relative", background: "#F5F5F4", maxWidth: 780, width: "100%", maxHeight: "88vh", display: "flex", flexWrap: "wrap", overflowY: "auto" }}>
+      <div style={{ position: "relative", background: "#F5F5F4", maxWidth: 780, width: "100%", maxHeight: "88vh", display: "flex", flexWrap: "wrap", overflowY: "auto", alignContent: "flex-start" }}>
         <button className="btn" onClick={onClose} style={{ position: "absolute", top: 14, right: 14, background: "rgba(255,255,255,0.9)", padding: 8, zIndex: 2, color: "#1E1B8F" }}>
           <X size={18} />
         </button>
@@ -409,3 +409,4 @@ function Field({ name, label, type = "text", placeholder, required }) {
     </label>
   );
 }
+
