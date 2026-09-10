@@ -14,6 +14,8 @@ async function GET() {
     const formatted = products.map((p) => ({
       ...p,
       specs: JSON.parse(p.specs),
+      colors: p.colors ? JSON.parse(p.colors) : null,
+      images: p.images ? JSON.parse(p.images) : (p.imageUrl ? [p.imageUrl] : []),
     }));
 
     return NextResponse.json(
