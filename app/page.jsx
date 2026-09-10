@@ -345,6 +345,9 @@ function ProductCard({ product, onAdd, onSelect }) {
 function ProductModal({ product, onClose, onAdd }) {
   const hue = { phones: "#4A5568", laptops: "#1E1B8F", tablets: "#6B7280", accessories: "#1A1B1E" }[product.category] || "#4A5568";
   const isUnlimited = product.stock >= 999;
+  const [selectedColor, setSelectedColor] = useState(product.colors && product.colors.length > 0 ? product.colors[0] : null);
+  const gallery = product.images && product.images.length > 0 ? product.images : (product.imageUrl ? [product.imageUrl] : []);
+  const [activeImage, setActiveImage] = useState(0);
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
       <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(14,15,18,0.5)" }} />
@@ -352,11 +355,27 @@ function ProductModal({ product, onClose, onAdd }) {
         <button className="btn" onClick={onClose} style={{ position: "absolute", top: 14, right: 14, background: "rgba(255,255,255,0.9)", padding: 8, zIndex: 2, color: "#1E1B8F" }}>
           <X size={18} />
         </button>
-        {product.imageUrl ? (
-          <img src={product.imageUrl} alt={product.name} style={{ flex: "1 1 320px", minHeight: 300, objectFit: "cover", width: "100%" }} />
-        ) : (
-          <div style={{ flex: "1 1 320px", minHeight: 300, background: `linear-gradient(160deg, ${hue}, #1E1B8F)` }} />
-        )}
+        <div style={{ flex: "1 1 320px", display: "flex", flexDirection: "column" }}>
+          {gallery.length > 0 ? (
+            <img src={gallery[activeImage]} alt={product.name} style={{ minHeight: 300, objectFit: "cover", width: "100%", flex: 1 }} />
+          ) : (
+            <div style={{ minHeight: 300, background: `linear-gradient(160deg, ${hue}, #1E1B8F)`, flex: 1 }} />
+          )}
+          {gallery.length > 1 && (
+            <div style={{ display: "flex", gap: 6, padding: 10, overflowX: "auto", background: "#EAEAE7" }}>
+              {gallery.map((img, i) => (
+                <button
+                  key={i}
+                  className="btn"
+                  onClick={() => setActiveImage(i)}
+                  style={{ padding: 0, background: "none", flexShrink: 0, border: i === activeImage ? "2px solid #1E1B8F" : "2px solid transparent" }}
+                >
+                  <img src={img} alt={`${product.name} ${i + 1}`} style={{ width: 52, height: 52, objectFit: "cover", display: "block" }} />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div style={{ flex: "1 1 320px", padding: 32 }}>
           <span style={{ fontSize: 11.5, fontWeight: 600, color: "#1E1B8F", textTransform: "capitalize" }}>{product.category}</span>
           <h2 style={{ fontSize: 24, margin: "8px 0 4px", fontWeight: 700 }}>{product.name}</h2>
@@ -369,6 +388,30 @@ function ProductModal({ product, onClose, onAdd }) {
               </li>
             ))}
           </ul>
+          {product.colors && product.colors.length > 0 && (
+            <div style={{ marginBottom: 24 }}>
+              <p style={{ fontSize: 12.5, fontWeight: 600, color: "#1E1B8F", marginBottom: 8 }}>Color: {selectedColor}</p>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {product.colors.map((c) => (
+                  <button
+                    key={c}
+                    className="btn"
+                    onClick={() => setSelectedColor(c)}
+                    style={{
+                      padding: "7px 14px",
+                      fontSize: 12.5,
+                      fontWeight: 600,
+                      border: c === selectedColor ? "2px solid #1E1B8F" : "1px solid #D5D4CF",
+                      background: c === selectedColor ? "#1E1B8F" : "#FFFFFF",
+                      color: c === selectedColor ? "#FFFFFF" : "#1E1B8F",
+                    }}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           {!isUnlimited && (
             <p style={{ fontSize: 12.5, color: "#8A8F98", marginBottom: 20 }}>{product.stock} in stock</p>
           )}
@@ -381,7 +424,7 @@ function ProductModal({ product, onClose, onAdd }) {
             {product.stock <= 0 ? "Unavailable" : "Add to cart"}
           </button>
           <a
-            href={`https://wa.me/2348147684917?text=${encodeURIComponent("Hi, I'm interested in the " + product.name + " (" + product.spec + "). Is it available?")}`}
+            href={`https://wa.me/2348147684917?text=${encodeURIComponent("Hi, I'm interested in the " + product.name + " (" + product.spec + (selectedColor ? ", " + selectedColor + " color" : "") + "). Is it available?")}`}
             target="_blank"
             rel="noopener noreferrer"
             style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", textAlign: "center", background: "#25D366", color: "#fff", padding: "14px", fontSize: 14.5, fontWeight: 700, marginTop: 10, textDecoration: "none", boxSizing: "border-box" }}
@@ -409,4 +452,3 @@ function Field({ name, label, type = "text", placeholder, required }) {
     </label>
   );
 }
-
