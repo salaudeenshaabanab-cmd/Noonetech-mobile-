@@ -8,6 +8,10 @@ export const metadata = {
     statusBarStyle: "default",
     title: "NOONETECH",
   },
+  icons: {
+    icon: "https://i.ibb.co/spZ35y4S/514-AA084-FDAE-423-F-9-AFE-532248-E27467.png",
+    apple: "https://i.ibb.co/spZ35y4S/514-AA084-FDAE-423-F-9-AFE-532248-E27467.png",
+  },
 };
 
 export default function RootLayout({ children }) {
